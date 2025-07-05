@@ -25,7 +25,8 @@ import helmet from 'helmet';
 
 const app = express()
 app.use(cors())
-app.use(express.urlencoded({extended: false}))
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json())
 
 app.set('view engine','ejs')
 
@@ -59,20 +60,11 @@ app.get('/Short',async (req,res)=>{
 
 app.post('/shortUrls',async(req,res) => {
   if(!req.body.fullUrl) return res.send("url is required")
-   await ShortUrl.create({full: req.body.fullUrl})
-
-   res.redirect('/')
+  await ShortUrl.create({full: req.body.fullUrl})
+   res.redirect('/Short')
 })
 
-app.post('/shortUrls',async (req, res) => {
-      
-      if (!errors.isEmpty()) {
-        return res.status(400).send('Invalid URL');
-      }
-      await ShortUrl.create({ full: req.body.fullUrl });
-      res.redirect('/');
-    }
-  );
+
 
 app.get('/:shortUrl',async(req,res) => {
    const shortUrl = await  ShortUrl.findOne( {short: req.params.shortUrl} );
