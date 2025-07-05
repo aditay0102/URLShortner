@@ -57,11 +57,6 @@ app.get('/Short',async (req,res)=>{
   res.send({shortUrls: shortUrls});
 })
 
-app.post('/shortUrls',async(req,res) => {
-   await ShortUrl.create({full: req.body.fullUrl})
-
-   res.redirect('/')
-})
 
 app.post('/shortUrls',body('fullUrl').isURL().withMessage('Enter a valid URL'),
     async (req, res) => {
@@ -70,7 +65,7 @@ app.post('/shortUrls',body('fullUrl').isURL().withMessage('Enter a valid URL'),
         return res.status(400).send('Invalid URL');
       }
       await ShortUrl.create({ full: req.body.fullUrl });
-      res.redirect('/');
+      res.redirect('/Short');
     }
   );
 
