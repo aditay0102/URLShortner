@@ -52,7 +52,7 @@ app.get('/',(req,res)=>{
 })
   
 
-app.get('/',async (req,res)=>{
+app.get('/Short',async (req,res)=>{
     const shortUrls = await ShortUrl.find()
    //res.render('index',{shortUrls: shortUrls})
   res.send({shortUrls: shortUrls});
