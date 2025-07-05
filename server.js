@@ -33,8 +33,8 @@ app.set('view engine','ejs')
 
 
 const limiter = rateLimit({
-	windowMs: 15 * 60 * 1000, // 15 minutes
-	limit: 5, 
+	windowMs: 5 * 60 * 1000, // 15 minutes
+	limit: 10, 
 	standardHeaders: 'draft-8', 
 	legacyHeaders: false, 
 	
@@ -47,10 +47,10 @@ app.use(helmet(),limiter) // using these middle ware to limit the users to miss 
 
 //  -------------     APIS 
 app.get('/',(req,res)=>{
-  return working ;
+  res.send("working")
 })
 
-app.get('/UrlShortner',async (req,res)=>{
+app.get('/ShortUrl',async (req,res)=>{
     const shortUrls = await ShortUrl.find()
     res.render('index',{shortUrls: shortUrls})
 })
