@@ -6,8 +6,18 @@ dotenv.config();
 import mongoose from 'mongoose'
 
 mongoose.connect(process.env.MONGO_URI)
-.then(() => console.log('MongoDB connected'))
-.catch(err => console.error('Connection error:', err));
+  .then(() => {
+    console.log('MongoDB connected');
+
+    // Start your app only after DB is connected
+    app.listen(process.env.PORT || 5000, () => {
+      console.log('Server started');
+      
+
+    });
+  })
+  .catch(err => console.error('Connection error:', err));
+
 
 import ShortUrl from './models/shortUrl.js';
 import { body, validationResult } from 'express-validator';
@@ -69,4 +79,3 @@ app.get('/:shortUrl',async(req,res) => {
     res.redirect(shortUrl.full)
 })
 
-app.listen(process.env.PORT || 5000);
