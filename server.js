@@ -59,10 +59,14 @@ app.get('/Short',async (req,res)=>{
 })
 
 app.post('/shortUrls',async(req,res) => {
-  if(!req.body.fullUrl) return res.send("url is required")
-    const exists = await ShortUrl.findOne(req.body.fullUrl)
-    if(exists) res.send("already exists");
-  await ShortUrl.create({full: req.body.fullUrl})
+  const url = req.body.fullUrl
+  if(!url) return res.send("url is required")
+
+    const exists = await ShortUrl.findOne({ full: url });
+    console.log(exists.length);
+    if (exists) return res.status(409).send("URL already exists");
+
+  await ShortUrl.create({full: url})
    res.redirect('/Short')
 })
 
