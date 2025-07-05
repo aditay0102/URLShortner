@@ -1,9 +1,8 @@
 import express from 'express'
-
-
 import dotenv from 'dotenv';
 dotenv.config();
 import mongoose from 'mongoose'
+import cors from 'cors'
 
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
@@ -18,7 +17,6 @@ mongoose.connect(process.env.MONGO_URI)
   })
   .catch(err => console.error('Connection error:', err));
 
-
 import ShortUrl from './models/shortUrl.js';
 import { body, validationResult } from 'express-validator';
 import { rateLimit } from 'express-rate-limit'
@@ -26,6 +24,7 @@ import helmet from 'helmet';
 
 
 const app = express()
+app.use(coes())
 app.use(express.urlencoded({extended: false}))
 
 app.set('view engine','ejs')
