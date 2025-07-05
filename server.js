@@ -33,7 +33,7 @@ app.set('view engine','ejs')
 
 
 const limiter = rateLimit({
-	windowMs: 5 * 60 * 1000, // 15 minutes
+	windowMs: 0 * 60 * 1000, // 15 minutes
 	limit: 10, 
 	standardHeaders: 'draft-8', 
 	legacyHeaders: false, 
