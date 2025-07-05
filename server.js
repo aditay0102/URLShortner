@@ -52,7 +52,8 @@ app.get('/',(req,res)=>{
 
 app.get('/ShortUrl',async (req,res)=>{
     const shortUrls = await ShortUrl.find()
-    res.render('index',{shortUrls: shortUrls})
+  //  res.render('index',{shortUrls: shortUrls})
+  res.send({shortUrls: shortUrls});
 })
 
 app.post('/shortUrls',async(req,res) => {
