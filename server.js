@@ -57,15 +57,20 @@ app.get('/Short',async (req,res)=>{
   res.send({shortUrls: shortUrls});
 })
 
+app.post('/shortUrls',async(req,res) => {
+  if(!req.body.fullUrl) return res.send("url is required")
+   await ShortUrl.create({full: req.body.fullUrl})
 
-app.post('/shortUrls',body('fullUrl').isURL().withMessage('Enter a valid URL'),
-    async (req, res) => {
-      const errors = validationResult(req);
+   res.redirect('/')
+})
+
+app.post('/shortUrls',async (req, res) => {
+      
       if (!errors.isEmpty()) {
         return res.status(400).send('Invalid URL');
       }
       await ShortUrl.create({ full: req.body.fullUrl });
-      res.redirect('/Short');
+      res.redirect('/');
     }
   );
 
