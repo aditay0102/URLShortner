@@ -24,7 +24,7 @@ import helmet from 'helmet';
 
 
 const app = express()
-app.use(coes())
+app.use(cors())
 app.use(express.urlencoded({extended: false}))
 
 app.set('view engine','ejs')
