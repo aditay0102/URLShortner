@@ -46,16 +46,16 @@ app.use(helmet(),limiter) // using these middle ware to limit the users to miss 
 
 
 //  -------------     APIS 
-/*
+
 app.get('/',(req,res)=>{
   res.send("working")
 })
-  */
+  
 
 app.get('/',async (req,res)=>{
     const shortUrls = await ShortUrl.find()
-   res.render('index',{shortUrls: shortUrls})
-  //res.send({shortUrls: shortUrls});
+   //res.render('index',{shortUrls: shortUrls})
+  res.send({shortUrls: shortUrls});
 })
 
 app.post('/shortUrls',async(req,res) => {
