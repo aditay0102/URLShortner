@@ -46,7 +46,11 @@ app.use(helmet(),limiter) // using these middle ware to limit the users to miss 
 
 
 //  -------------     APIS 
-app.get('/',async (req,res)=>{
+app.get('/',(req,res)=>{
+  return working ;
+})
+
+app.get('/UrlShortner',async (req,res)=>{
     const shortUrls = await ShortUrl.find()
     res.render('index',{shortUrls: shortUrls})
 })
