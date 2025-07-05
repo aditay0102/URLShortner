@@ -1,0 +1,72 @@
+import express from 'express'
+
+
+import dotenv from 'dotenv';
+dotenv.config();
+import mongoose from 'mongoose'
+
+mongoose.connect(process.env.MONGO_URI)
+.then(() => console.log('MongoDB connected'))
+.catch(err => console.error('Connection error:', err));
+
+import ShortUrl from './models/shortUrl.js';
+import { body, validationResult } from 'express-validator';
+import { rateLimit } from 'express-rate-limit'
+import helmet from 'helmet';
+
+
+const app = express()
+app.use(express.urlencoded({extended: false}))
+
+app.set('view engine','ejs')
+
+
+
+const limiter = rateLimit({
+	windowMs: 15 * 60 * 1000, // 15 minutes
+	limit: 5, 
+	standardHeaders: 'draft-8', 
+	legacyHeaders: false, 
+	
+})
+
+//  middlewares 
+app.use(helmet(),limiter) // using these middle ware to limit the users to miss use it 
+
+
+
+//  -------------     APIS 
+app.get('/',async (req,res)=>{
+    const shortUrls = await ShortUrl.find()
+    res.render('index',{shortUrls: shortUrls})
+})
+
+app.post('/shortUrls',async(req,res) => {
+   await ShortUrl.create({full: req.body.fullUrl})
+
+   res.redirect('/')
+})
+
+app.post('/shortUrls',body('fullUrl').isURL().withMessage('Enter a valid URL'),
+    async (req, res) => {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).send('Invalid URL');
+      }
+      await ShortUrl.create({ full: req.body.fullUrl });
+      res.redirect('/');
+    }
+  );
+
+app.get('/:shortUrl',async(req,res) => {
+   const shortUrl = await  ShortUrl.findOne( {short: req.params.shortUrl} );
+
+   if(shortUrl == null) return res.sendStatus(404)
+
+    shortUrl.clicks++ 
+    shortUrl.save()
+
+    res.redirect(shortUrl.full)
+})
+
+app.listen(process.env.PORT || 5000);
